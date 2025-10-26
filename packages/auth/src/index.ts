@@ -13,8 +13,6 @@ export function initAuth<
   productionUrl: string;
   secret: string | undefined;
 
-  discordClientId: string;
-  discordClientSecret: string;
   extraPlugins?: TExtraPlugins;
 }) {
   const config = {
@@ -32,12 +30,6 @@ export function initAuth<
     ],
     emailAndPassword: {
       enabled: true,
-    },
-    socialProviders: {
-      discord: {
-        clientId: options.discordClientId,
-        enabled: true,
-      },
     },
     trustedOrigins: ["expo://"],
     onAPIError: {

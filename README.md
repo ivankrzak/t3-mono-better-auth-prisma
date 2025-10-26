@@ -44,18 +44,13 @@ apps
   │   ├─ React 19
   │   ├─ Tailwind CSS v4
   │   └─ E2E Typesafe API Server & Client
-  └─ tanstack-start
-      ├─ Tanstack Start v1 (rc)
-      ├─ React 19
-      ├─ Tailwind CSS v4
-      └─ E2E Typesafe API Server & Client
 packages
   ├─ api
   │   └─ tRPC v11 router definition
   ├─ auth
   │   └─ Authentication using better-auth.
   ├─ db
-  │   └─ Typesafe db calls using Drizzle & Supabase
+  │   └─ Typesafe db calls using Prisma ORM
   └─ ui
       └─ Start of a UI package for the webapp using shadcn-ui
 tooling
@@ -73,52 +68,29 @@ tooling
 
 ## Quick Start
 
-> **Note**
-> The [db](./packages/db) package is preconfigured to use Supabase and is **edge-bound** with the [Vercel Postgres](https://github.com/vercel/storage/tree/main/packages/postgres) driver. If you're using something else, make the necessary modifications to the [schema](./packages/db/src/schema.ts) as well as the [client](./packages/db/src/index.ts) and the [drizzle config](./packages/db/drizzle.config.ts). If you want to switch to non-edge database driver, remove `export const runtime = "edge";` [from all pages and api routes](https://github.com/t3-oss/create-t3-turbo/issues/634#issuecomment-1730240214).
-
-To get it running, follow the steps below:
-
-### 1. Setup dependencies
-
-> [!NOTE]
->
-> While the repo does contain both a Next.js and Tanstack Start version of a web app, you can pick which one you like to use and delete the other folder before starting the setup.
-
-```bash
+````bash
 # Install dependencies
 pnpm i
 
-# Configure environment variables
-# There is an `.env.example` in the root directory you can use for reference
-cp .env.example .env
+# Spin up local DB using DOCKER
+cd apps/nextjs
+docker compose up
 
-# Push the Drizzle schema to the database
-pnpm db:push
-```
+# Run Migrations and generate from root folder
+pnpm db:migrate
+pnpm db:generate
 
-### 2. Generate Better Auth Schema
+# If types are not inferred properly you need to build API/DB package and run pnpm install in app
+pnpm turbo build
 
-This project uses [Better Auth](https://www.better-auth.com) for authentication. The auth schema needs to be generated using the Better Auth CLI before you can use the authentication features.
+cd packages/db
+pnpm dev
+cd packages/api
+pnpm dev
 
-```bash
-# Generate the Better Auth schema
-pnpm --filter @acme/auth generate
-```
-
-This command runs the Better Auth CLI with the following configuration:
-
-- **Config file**: `packages/auth/script/auth-cli.ts` - A CLI-only configuration file (isolated from src to prevent imports)
-- **Output**: `packages/db/src/auth-schema.ts` - Generated Drizzle schema for authentication tables
-
-The generation process:
-
-1. Reads the Better Auth configuration from `packages/auth/script/auth-cli.ts`
-2. Generates the appropriate database schema based on your auth setup
-3. Outputs a Drizzle-compatible schema file to the `@acme/db` package
-
-> **Note**: The `auth-cli.ts` file is placed in the `script/` directory (instead of `src/`) to prevent accidental imports from other parts of the codebase. This file is exclusively for CLI schema generation and should **not** be used directly in your application. For runtime authentication, use the configuration from `packages/auth/src/index.ts`.
-
-For more information about the Better Auth CLI, see the [official documentation](https://www.better-auth.com/docs/concepts/cli#generate).
+# Run server
+cd apps/nextjs
+pnpm dev
 
 ### 3. Configure Expo `dev`-script
 
@@ -130,7 +102,7 @@ For more information about the Better Auth CLI, see the [official documentation]
 
    ```diff
    +  "dev": "expo start --ios",
-   ```
+````
 
 2. Run `pnpm dev` at the project root folder.
 
