@@ -1,32 +1,51 @@
 "use client";
 
-import { useForm } from "@tanstack/react-form";
+import { zodResolver } from "@hookform/resolvers/zod/dist/zod.js";
 import {
   useMutation,
   useQueryClient,
   useSuspenseQuery,
 } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
 import z from "zod";
 
 import type { RouterOutputs } from "@acme/api";
 import { cn } from "@acme/ui";
 import { Button } from "@acme/ui/button";
-import {
-  Field,
-  FieldContent,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-} from "@acme/ui/field";
-import { Input } from "@acme/ui/input";
+import { Form } from "@acme/ui/form";
 import { toast } from "@acme/ui/toast";
 
 import { useTRPC } from "~/trpc/react";
+import { FormTextInput } from "./inputs/TextInput";
+
+// Define the form schema
+const createPostSchema = z.object({
+  title: z
+    .string()
+    .min(2, "Názov musí mať aspoň 2 znaky")
+    .max(100, "Názov musí mať menej ako 100 znakov"),
+  content: z
+    .string()
+    .min(2, "Obsah musí mať aspoň 2 znaky")
+    .max(1000, "Obsah musí mať menej ako 1000 znakov"),
+});
+
+type CreatePostFormData = z.infer<typeof createPostSchema>;
 
 export function CreatePostForm() {
   const trpc = useTRPC();
 
   const queryClient = useQueryClient();
+
+  const form = useForm<CreatePostFormData>({
+    defaultValues: {
+      content: "",
+      title: "",
+    },
+    resolver: zodResolver(createPostSchema),
+  });
+  const { errors } = form.formState;
+
   const createPost = useMutation(
     trpc.post.create.mutationOptions({
       onSuccess: async () => {
@@ -43,74 +62,33 @@ export function CreatePostForm() {
     }),
   );
 
-  const form = useForm({
-    defaultValues: {
-      content: "",
-      title: "",
-    },
-    onSubmit: (data) => createPost.mutate(data.value),
-  });
+  const handleSubmit = async (data: CreatePostFormData) => {
+    createPost.mutate(data);
+  };
 
   return (
-    <form
-      className="w-full max-w-2xl"
-      onSubmit={(event) => {
-        event.preventDefault();
-        void form.handleSubmit();
-      }}
-    >
-      <FieldGroup>
-        <form.Field
-          name="title"
-          children={(field) => {
-            const isInvalid =
-              field.state.meta.isTouched && !field.state.meta.isValid;
-            return (
-              <Field data-invalid={isInvalid}>
-                <FieldContent>
-                  <FieldLabel htmlFor={field.name}>Bug Title</FieldLabel>
-                </FieldContent>
-                <Input
-                  id={field.name}
-                  name={field.name}
-                  value={field.state.value}
-                  onBlur={field.handleBlur}
-                  onChange={(e) => field.handleChange(e.target.value)}
-                  aria-invalid={isInvalid}
-                  placeholder="Title"
-                />
-                {isInvalid && <FieldError errors={field.state.meta.errors} />}
-              </Field>
-            );
-          }}
-        />
-        <form.Field
-          name="content"
-          children={(field) => {
-            const isInvalid =
-              field.state.meta.isTouched && !field.state.meta.isValid;
-            return (
-              <Field data-invalid={isInvalid}>
-                <FieldContent>
-                  <FieldLabel htmlFor={field.name}>Content</FieldLabel>
-                </FieldContent>
-                <Input
-                  id={field.name}
-                  name={field.name}
-                  value={field.state.value}
-                  onBlur={field.handleBlur}
-                  onChange={(e) => field.handleChange(e.target.value)}
-                  aria-invalid={isInvalid}
-                  placeholder="Content"
-                />
-                {isInvalid && <FieldError errors={field.state.meta.errors} />}
-              </Field>
-            );
-          }}
-        />
-      </FieldGroup>
-      <Button type="submit">Create</Button>
-    </form>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+        <h3>Vytvoriť nový príspevok</h3>
+        <div className="flex flex-col gap-4">
+          <FormTextInput
+            id="title"
+            iconClassName="text-white"
+            placeholder="Názov"
+            isRequired
+            errorMessage={errors.title?.message}
+          />
+          <FormTextInput
+            id="content"
+            iconClassName="text-white"
+            placeholder="Obsah"
+            isRequired
+            errorMessage={errors.content?.message}
+          />
+        </div>
+        <Button type="submit">Create</Button>
+      </form>
+    </Form>
   );
 }
 

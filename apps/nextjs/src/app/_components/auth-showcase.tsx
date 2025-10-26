@@ -4,32 +4,18 @@ import { redirect } from "next/navigation";
 import { Button } from "@acme/ui/button";
 
 import { auth, getSession } from "~/auth/server";
+import { SignInForm } from "./SignInForm";
+import { SignUpForm } from "./SignUpForm";
 
 export async function AuthShowcase() {
   const session = await getSession();
 
   if (!session) {
     return (
-      <form>
-        <Button
-          size="lg"
-          formAction={async () => {
-            "use server";
-            const res = await auth.api.signInSocial({
-              body: {
-                provider: "discord",
-                callbackURL: "/",
-              },
-            });
-            if (!res.url) {
-              throw new Error("No URL returned from signInSocial");
-            }
-            redirect(res.url);
-          }}
-        >
-          Sign in with Discord
-        </Button>
-      </form>
+      <div className="flex items-center justify-center gap-8">
+        <SignInForm />
+        <SignUpForm />
+      </div>
     );
   }
 
