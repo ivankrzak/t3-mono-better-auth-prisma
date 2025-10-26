@@ -2,6 +2,8 @@
   "name": "@acme/db",
   "private": true,
   "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -12,33 +14,40 @@
       "default": "./src/client.ts"
     },
     "./schema": {
-      "types": "./dist/schema.d.ts",
-      "default": "./src/schema.ts"
+      "types": "./dist/prisma/schema.d.ts",
+      "default": "./src/prisma/schema.ts"
     }
   },
   "license": "MIT",
+  "prisma": {
+    "schema": "./src/prisma/schema.prisma"
+  },
   "scripts": {
-    "build": "tsc",
+    "build": "prisma generate && tsc",
     "clean": "git clean -xdf .cache .turbo dist node_modules",
     "dev": "tsc",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "lint": "eslint --flag unstable_native_nodejs_ts_config",
-    "push": "pnpm with-env drizzle-kit push",
-    "studio": "pnpm with-env drizzle-kit studio",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false",
-    "with-env": "dotenv -e ../../.env --"
+    "with-env": "dotenv -e ../../.env --",
+    "push": "pnpm with-env prisma db push",
+    "db:generate": "pnpm with-env prisma generate",
+    "db:migrate": "pnpm with-env prisma migrate dev --skip-generate",
+    "db:deploy": "pnpm with-env prisma migrate deploy",
+    "db:reset": "pnpm with-env prisma migrate reset",
+    "db:studio": "pnpm with-env prisma studio --port 5556",
+    "db:seed": "pnpm with-env tsx src/seed.ts"
   },
   "dependencies": {
+    "@prisma/client": "^6.7.0",
     "@vercel/postgres": "^0.10.0",
-    "drizzle-orm": "^0.44.7",
-    "drizzle-zod": "^0.8.3",
     "zod": "catalog:"
   },
   "devDependencies": {
     "@acme/eslint-config": "workspace:*",
     "@acme/prettier-config": "workspace:*",
     "@acme/tsconfig": "workspace:*",
-    "drizzle-kit": "^0.31.5",
+    "@types/node": "^22.14.1",
     "eslint": "catalog:",
     "prettier": "catalog:",
     "typescript": "catalog:"

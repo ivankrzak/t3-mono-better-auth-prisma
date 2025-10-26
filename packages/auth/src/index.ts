@@ -1,10 +1,10 @@
 import type { BetterAuthOptions, BetterAuthPlugin } from "better-auth";
 import { expo } from "@better-auth/expo";
 import { betterAuth } from "better-auth";
-import { drizzleAdapter } from "better-auth/adapters/drizzle";
+import { prismaAdapter } from "better-auth/adapters/prisma";
 import { oAuthProxy } from "better-auth/plugins";
 
-import { db } from "@acme/db/client";
+import { db } from "@acme/db";
 
 export function initAuth<
   TExtraPlugins extends BetterAuthPlugin[] = [],
@@ -18,8 +18,8 @@ export function initAuth<
   extraPlugins?: TExtraPlugins;
 }) {
   const config = {
-    database: drizzleAdapter(db, {
-      provider: "pg",
+    database: prismaAdapter(db, {
+      provider: "postgresql",
     }),
     baseURL: options.baseUrl,
     secret: options.secret,
@@ -30,11 +30,13 @@ export function initAuth<
       expo(),
       ...(options.extraPlugins ?? []),
     ],
+    emailAndPassword: {
+      enabled: true,
+    },
     socialProviders: {
       discord: {
         clientId: options.discordClientId,
-        clientSecret: options.discordClientSecret,
-        redirectURI: `${options.productionUrl}/api/auth/callback/discord`,
+        enabled: true,
       },
     },
     trustedOrigins: ["expo://"],

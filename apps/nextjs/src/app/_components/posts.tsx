@@ -6,9 +6,9 @@ import {
   useQueryClient,
   useSuspenseQuery,
 } from "@tanstack/react-query";
+import z from "zod";
 
 import type { RouterOutputs } from "@acme/api";
-import { CreatePostSchema } from "@acme/db/schema";
 import { cn } from "@acme/ui";
 import { Button } from "@acme/ui/button";
 import {
@@ -47,9 +47,6 @@ export function CreatePostForm() {
     defaultValues: {
       content: "",
       title: "",
-    },
-    validators: {
-      onSubmit: CreatePostSchema,
     },
     onSubmit: (data) => createPost.mutate(data.value),
   });

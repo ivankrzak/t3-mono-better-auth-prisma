@@ -1,12 +1,12 @@
 {
-  "$schema": "https://turborepo.com/schema.json",
+  "$schema": "https://turborepo.org/schema.json",
   "ui": "tui",
   "tasks": {
     "topo": {
       "dependsOn": ["^topo"]
     },
     "build": {
-      "dependsOn": ["^build"],
+      "dependsOn": ["^build", "db:generate"],
       "outputs": [".cache/tsbuildinfo.json", "dist/**"]
     },
     "dev": {
@@ -32,11 +32,28 @@
     "//#clean": {
       "cache": false
     },
-    "push": {
+    "db:reset": {
+      "cache": false
+    },
+    "db:generate": {
+      "cache": false
+    },
+    "db:push": {
       "cache": false,
       "interactive": true
     },
-    "studio": {
+    "db:migrate": {
+      "cache": false,
+      "interactive": true
+    },
+    "db:deploy": {
+      "cache": false
+    },
+    "db:studio": {
+      "cache": false,
+      "persistent": true
+    },
+    "db:seed": {
       "cache": false,
       "persistent": true
     },
@@ -46,12 +63,29 @@
     }
   },
   "globalEnv": [
-    "POSTGRES_URL",
-    "AUTH_DISCORD_ID",
-    "AUTH_DISCORD_SECRET",
-    "AUTH_REDIRECT_PROXY_URL",
+    "DATABASE_URL",
+    "PORT",
+    "WEBFLOW_API_KEY",
+    "WEBFLOW_SITE_ID",
+    "WEBFLOW_ATTRACTION_COLLECTION_ID",
+    "WEBFLOW_EVENT_COLLECTION_ID",
+    "WEBFLOW_NEWS_COLLECTION_ID",
+    "WEBFLOW_NEWS_CATEGORY_COLLECTION_ID",
+    "WEBFLOW_NEWS_TAG_COLLECTION_ID",
     "AUTH_SECRET",
-    "PORT"
+    "BUNNY_CDN_STORAGE_ZONE_BASE_URL",
+    "BUNNY_CDN_API_KEY",
+    "STRIPE_PUBLISHABLE_KEY",
+    "STRIPE_API_KEY",
+    "STRIPE_TAX_RATE_5",
+    "STRIPE_TAX_RATE_19",
+    "STRIPE_TAX_RATE_23",
+    "MOCK_ASSECCO",
+    "SENTRY_DSN",
+    "NEXT_PUBLIC_SENTRY_DSN",
+    "SENTRY_ORG",
+    "SENTRY_PROJECT",
+    "SENTRY_AUTH_TOKEN"
   ],
   "globalPassThroughEnv": [
     "NODE_ENV",
