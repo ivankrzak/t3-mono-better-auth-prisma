@@ -19,9 +19,6 @@
     }
   },
   "license": "MIT",
-  "prisma": {
-    "schema": "./src/prisma/schema.prisma"
-  },
   "scripts": {
     "build": "prisma generate && tsc",
     "clean": "git clean -xdf .cache .turbo dist node_modules",
@@ -30,17 +27,19 @@
     "lint": "eslint --flag unstable_native_nodejs_ts_config",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false",
     "with-env": "dotenv -e ../../.env --",
-    "push": "pnpm with-env prisma db push",
+    "push": "pnpm with-env prisma db push && pnpm db:generate",
     "db:generate": "pnpm with-env prisma generate",
-    "db:migrate": "pnpm with-env prisma migrate dev --skip-generate",
+    "db:migrate": "pnpm with-env prisma migrate dev && pnpm db:generate",
     "db:deploy": "pnpm with-env prisma migrate deploy",
-    "db:reset": "pnpm with-env prisma migrate reset",
+    "db:reset": "pnpm with-env prisma migrate reset && pnpm db:seed && pnpm db:generate",
     "db:studio": "pnpm with-env prisma studio --port 5556",
     "db:seed": "pnpm with-env tsx src/seed.ts"
   },
   "dependencies": {
-    "@prisma/client": "^6.7.0",
+    "@prisma/adapter-pg": "^7.8.0",
+    "@prisma/client": "^7.8.0",
     "@vercel/postgres": "^0.10.0",
+    "pg": "^8.16.3",
     "zod": "catalog:"
   },
   "devDependencies": {
@@ -50,6 +49,7 @@
     "@types/node": "^22.14.1",
     "eslint": "catalog:",
     "prettier": "catalog:",
+    "prisma": "^7.8.0",
     "typescript": "catalog:"
   },
   "prettier": "@acme/prettier-config"
