@@ -13,7 +13,6 @@
     "clean": "git clean -xdf .cache .turbo dist node_modules",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "lint": "eslint --flag unstable_native_nodejs_ts_config",
-    "generate": "dotenv -e ../../.env -- pnpx @better-auth/cli generate --config script/auth-cli.ts --output ../db/src/auth-schema.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
@@ -27,9 +26,12 @@
     "@acme/eslint-config": "workspace:*",
     "@acme/prettier-config": "workspace:*",
     "@acme/tsconfig": "workspace:*",
-    "@better-auth/cli": "catalog:",
+    "@types/node": "catalog:",
+    "@types/react": "catalog:react19",
     "eslint": "catalog:",
+    "expo": "catalog:",
     "prettier": "catalog:",
+    "react-native": "catalog:",
     "typescript": "catalog:"
   },
   "prettier": "@acme/prettier-config"
