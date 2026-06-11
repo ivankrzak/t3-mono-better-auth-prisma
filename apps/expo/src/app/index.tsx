@@ -155,7 +155,7 @@ export default function Index() {
         <LegendList
           data={postQuery.data ?? []}
           estimatedItemSize={20}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => String(item.id)}
           ItemSeparatorComponent={() => <View className="h-2" />}
           renderItem={(p) => (
             <PostCard

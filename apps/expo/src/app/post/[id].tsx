@@ -6,7 +6,7 @@ import { trpc } from "~/utils/api";
 
 export default function Post() {
   const { id } = useGlobalSearchParams<{ id: string }>();
-  const { data } = useQuery(trpc.post.byId.queryOptions({ id }));
+  const { data } = useQuery(trpc.post.byId.queryOptions({ id: Number(id) }));
 
   if (!data) return null;
 

@@ -29,25 +29,21 @@ export const FormTextInput = ({
 
   // Get error message from form state if not provided explicitly
   const fieldError = errors[id]?.message as string | undefined;
-  const displayErrorMessage = errorMessage || fieldError;
+  const displayErrorMessage = errorMessage ?? fieldError;
 
   // Configure register options based on numeric conversion
   const registerOptions = {
     ...(numericConversion !== "none" && {
       setValueAs: (value: string) => {
-        if (value === "" || value == null) return undefined;
+        if (value === "") return undefined;
 
         if (numericConversion === "integer") {
           const parsed = parseInt(value, 10);
           return isNaN(parsed) ? value : parsed;
         }
 
-        if (numericConversion === "float") {
-          const parsed = parseFloat(value);
-          return isNaN(parsed) ? value : parsed;
-        }
-
-        return value;
+        const parsed = parseFloat(value);
+        return isNaN(parsed) ? value : parsed;
       },
     }),
     ...(min !== undefined && { min }),
