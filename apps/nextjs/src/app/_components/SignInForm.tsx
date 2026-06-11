@@ -50,7 +50,7 @@ export const SignInForm = () => {
           },
         },
       );
-    } catch (error) {
+    } catch {
       toast.error("Prihlásenie zlyhalo. Skontrolujte údaje a skúste to znova.");
     } finally {
       setIsLoading(false);

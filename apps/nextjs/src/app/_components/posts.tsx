@@ -62,7 +62,7 @@ export function CreatePostForm() {
     }),
   );
 
-  const handleSubmit = async (data: CreatePostFormData) => {
+  const handleSubmit = (data: CreatePostFormData) => {
     createPost.mutate(data);
   };
 

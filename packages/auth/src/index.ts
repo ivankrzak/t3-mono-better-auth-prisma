@@ -1,19 +1,16 @@
-import type { BetterAuthOptions, BetterAuthPlugin } from "better-auth";
+import type { BetterAuthOptions } from "better-auth";
 import { expo } from "@better-auth/expo";
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
+import { nextCookies } from "better-auth/next-js";
 import { oAuthProxy } from "better-auth/plugins";
 
 import { db } from "@acme/db";
 
-export function initAuth<
-  TExtraPlugins extends BetterAuthPlugin[] = [],
->(options: {
+export function initAuth(options: {
   baseUrl: string;
   productionUrl: string;
   secret: string | undefined;
-
-  extraPlugins?: TExtraPlugins;
 }) {
   const config = {
     database: prismaAdapter(db, {
@@ -26,7 +23,8 @@ export function initAuth<
         productionURL: options.productionUrl,
       }),
       expo(),
-      ...(options.extraPlugins ?? []),
+      // must stay last in the plugin array
+      nextCookies(),
     ],
     emailAndPassword: {
       enabled: true,
