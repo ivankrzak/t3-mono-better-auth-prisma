@@ -1,0 +1,12 @@
+{
+  "$schema": "https://turborepo.com/schema.json",
+  "extends": ["//"],
+  "tasks": {
+    "typecheck": {
+      "dependsOn": ["^topo", "^build", "db:generate"]
+    },
+    "lint": {
+      "dependsOn": ["^topo", "^build", "db:generate"]
+    }
+  }
+}

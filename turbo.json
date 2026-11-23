@@ -1,5 +1,5 @@
 {
-  "$schema": "https://turborepo.org/schema.json",
+  "$schema": "https://turborepo.com/schema.json",
   "ui": "tui",
   "tasks": {
     "topo": {
@@ -53,40 +53,12 @@
       "cache": false,
       "persistent": true
     },
-    "db:seed": {
-      "cache": false,
-      "persistent": true
-    },
     "ui-add": {
       "cache": false,
       "interactive": true
     }
   },
-  "globalEnv": [
-    "DATABASE_URL",
-    "PORT",
-    "WEBFLOW_API_KEY",
-    "WEBFLOW_SITE_ID",
-    "WEBFLOW_ATTRACTION_COLLECTION_ID",
-    "WEBFLOW_EVENT_COLLECTION_ID",
-    "WEBFLOW_NEWS_COLLECTION_ID",
-    "WEBFLOW_NEWS_CATEGORY_COLLECTION_ID",
-    "WEBFLOW_NEWS_TAG_COLLECTION_ID",
-    "AUTH_SECRET",
-    "BUNNY_CDN_STORAGE_ZONE_BASE_URL",
-    "BUNNY_CDN_API_KEY",
-    "STRIPE_PUBLISHABLE_KEY",
-    "STRIPE_API_KEY",
-    "STRIPE_TAX_RATE_5",
-    "STRIPE_TAX_RATE_19",
-    "STRIPE_TAX_RATE_23",
-    "MOCK_ASSECCO",
-    "SENTRY_DSN",
-    "NEXT_PUBLIC_SENTRY_DSN",
-    "SENTRY_ORG",
-    "SENTRY_PROJECT",
-    "SENTRY_AUTH_TOKEN"
-  ],
+  "globalEnv": ["DATABASE_URL", "PORT", "AUTH_SECRET"],
   "globalPassThroughEnv": [
     "NODE_ENV",
     "CI",
