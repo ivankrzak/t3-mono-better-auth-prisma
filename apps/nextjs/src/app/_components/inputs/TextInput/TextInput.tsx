@@ -17,8 +17,9 @@ import {
   TooltipTrigger,
 } from "@acme/ui/tooltip";
 
-export interface CustomTextInputProps
-  extends React.ComponentProps<typeof Input> {
+export interface CustomTextInputProps extends React.ComponentProps<
+  typeof Input
+> {
   id: string;
   label?: string;
   subLabel?: string;

@@ -8,7 +8,7 @@
  */
 import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
-import { z, ZodError } from "zod/v4";
+import { z, ZodError } from "zod";
 
 import type { Auth } from "@acme/auth";
 import { db } from "@acme/db/client";
@@ -85,7 +85,7 @@ const timingMiddleware = t.middleware(async ({ next, path }) => {
   if (t._config.isDev) {
     // artificial delay in dev 100-500ms
     const waitMs = Math.floor(Math.random() * 400) + 100;
-    await new Promise((resolve) => setTimeout(resolve, waitMs));
+    await new Promise<void>((resolve) => setTimeout(() => resolve(), waitMs));
   }
 
   const result = await next();

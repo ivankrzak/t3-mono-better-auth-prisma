@@ -1,9 +1,5 @@
 # create-t3-turbo
 
-> [!NOTE]
->
-> create-t3-turbo now includes the option to use Tanstack Start for the web app!
-
 ## Installation
 
 > [!NOTE]
@@ -34,13 +30,13 @@ It uses [Turborepo](https://turborepo.com) and contains:
   └─ Recommended extensions and settings for VSCode users
 apps
   ├─ expo
-  │   ├─ Expo SDK 54
-  │   ├─ React Native 0.81 using React 19
+  │   ├─ Expo SDK 58
+  │   ├─ React Native 0.88 using React 19
   │   ├─ Navigation using Expo Router
   │   ├─ Tailwind CSS v4 using NativeWind v5
   │   └─ Typesafe API calls using tRPC
   ├─ nextjs
-  │   ├─ Next.js 15
+  │   ├─ Next.js 16
   │   ├─ React 19
   │   ├─ Tailwind CSS v4
   │   └─ E2E Typesafe API Server & Client
@@ -68,13 +64,13 @@ tooling
 
 ## Quick Start
 
-````bash
-# Install dependencies
+```bash
+# Install dependencies (uses the pnpm version pinned in package.json#packageManager)
+corepack enable
 pnpm i
 
-# Spin up local DB using DOCKER
-cd apps/nextjs
-docker compose up
+# Copy the env template and point DATABASE_URL at a Postgres instance
+cp .env.example .env
 
 # Run Migrations and generate from root folder
 pnpm db:migrate
@@ -91,6 +87,7 @@ pnpm dev
 # Run server
 cd apps/nextjs
 pnpm dev
+```
 
 ### 3. Configure Expo `dev`-script
 
@@ -102,7 +99,7 @@ pnpm dev
 
    ```diff
    +  "dev": "expo start --ios",
-````
+   ```
 
 2. Run `pnpm dev` at the project root folder.
 
